@@ -1,0 +1,27 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <title>angular</title>
+    <!-- Load libraries -->
+    <!-- IE required polyfills, in this exact order -->
+    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/angular/angular.js"></script>
+</head>
+
+<body ng-app="app">
+    <div ng-controller="Ctrl">
+        <h1 style="color: red">Hi html</h1>
+        <input ng-model="username" /> {{username}}
+    </div>
+</body>
+<script>
+    var app = angular.module('app', [])
+
+    .controller('Ctrl', function($scope) {
+            
+    });
+</script>
+</html>
