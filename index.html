@@ -9,19 +9,85 @@
     <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-resource/angular-resource.min.js"></script>
 </head>
 
 <body ng-app="app">
     <div ng-controller="Ctrl">
         <h1 style="color: red">Hi html</h1>
         <input ng-model="username" /> {{username}}
+        <label>{{date}}</label>
     </div>
 </body>
 <script>
-    var app = angular.module('app', [])
+    var app = angular.module('app', ['ngResource', 'Dateserv'])
+        .controller('Ctrl', function($scope, DateService, serverTimeDelta) {
+            $scope.date = serverTimeDelta.d;
+        })
+        .service('serverTimeDelta', function($resource) {
+            var xmlHttp;
 
-    .controller('Ctrl', function($scope) {
-            
-    });
+            function srvTime() {
+                try {
+                    //FF, Opera, Safari, Chrome
+                    xmlHttp = new XMLHttpRequest();
+                } catch (err1) {
+                    //IE
+                    try {
+                        xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
+                    } catch (err2) {
+                        try {
+                            xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+                        } catch (eerr3) {
+                            //AJAX not supported, use CPU time.
+                            alert("AJAX not supported");
+                        }
+                    }
+                }
+                xmlHttp.open('HEAD', window.location.href.toString(), false);
+                xmlHttp.setRequestHeader("Content-Type", "text/html");
+                xmlHttp.send('');
+                return xmlHttp.getResponseHeader("Date");
+            }
+            var st = srvTime();
+            var date = new Date(st);
+            return {
+                d: date
+            };
+
+        });
+    angular.module('Dateserv', [])
+        .factory('DateService', function() {
+            var xmlHttp;
+
+            function srvTime() {
+                try {
+                    //FF, Opera, Safari, Chrome
+                    xmlHttp = new XMLHttpRequest();
+                } catch (err1) {
+                    //IE
+                    try {
+                        xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
+                    } catch (err2) {
+                        try {
+                            xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+                        } catch (eerr3) {
+                            //AJAX not supported, use CPU time.
+                            alert("AJAX not supported");
+                        }
+                    }
+                }
+                xmlHttp.open('HEAD', window.location.href.toString(), false);
+                xmlHttp.setRequestHeader("Content-Type", "text/html");
+                xmlHttp.send('');
+                return xmlHttp.getResponseHeader("Date");
+            }
+            var st = srvTime();
+            var date = new Date(st);
+            return {
+                d: date
+            };
+        });
 </script>
+
 </html>
